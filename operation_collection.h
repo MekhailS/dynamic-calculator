@@ -21,7 +21,7 @@ public:
     void initBasicOperations();
 
     /*!
-    * Add operations from .dll files stored in folder to collection
+    * Add to collection operations from .dll files stored in folder
     * @param path - folder with .dll files
     * @return error code
     */

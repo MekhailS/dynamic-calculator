@@ -5,6 +5,8 @@
 #ifndef DYNAMIC_CALCULATOR_ERROR_H
 #define DYNAMIC_CALCULATOR_ERROR_H
 
+#include <string>
+
 enum Error
 {
     ERR_OK,

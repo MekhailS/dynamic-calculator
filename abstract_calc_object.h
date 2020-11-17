@@ -15,7 +15,7 @@ class ACalcObject
 public:
 
     /*!
-     * Value used to return when error occurs
+     * Value used as result when error occurs
      */
     constexpr static const double NONE = 0.0;
 
@@ -86,14 +86,14 @@ public:
     }
 };
 
-/********************************************************************************
-    *  ALL OPERATIONS WITH <name> CREATED IN .DLL MUSH HAVE FOLLOWING STRUCTURE:
+/*********************************************************************************************
+    *  ALL OPERATIONS WITH <name> CREATED IN .DLL MUST HAVE FUNCTION WITH FOLLOWING STRUCTURE:
     *
     *  LOAD_FROM_DLL_SIGNATURE GET_OPERATION_INSTANCE()
     *  {
     *       return <name>().clone();
     *  }
- ********************************************************************************/
+ *********************************************************************************************/
 
 
 #endif //DYNAMIC_CALCULATOR_OPERATOR_VIRTUAL_H
