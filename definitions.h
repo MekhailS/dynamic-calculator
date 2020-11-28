@@ -2,8 +2,7 @@
 // Created by Mekhail on 12.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_DEFINITIONS_H
-#define DYNAMIC_CALCULATOR_DEFINITIONS_H
+#pragma once
 
 #include <string>
 #include <map>
@@ -20,7 +19,5 @@
 
 class ACalcObject;
 
-typedef std::pair<Error, double> ErrorWDouble;
-typedef std::shared_ptr<ACalcObject> p_ACalcObject;
-
-#endif //DYNAMIC_CALCULATOR_DEFINITIONS_H
+using ErrorWDouble = std::pair<Error, double>;
+using p_ACalcObject = std::shared_ptr<ACalcObject>;

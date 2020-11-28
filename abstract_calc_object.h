@@ -2,8 +2,7 @@
 // Created by Mekhail on 12.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_OPERATOR_VIRTUAL_H
-#define DYNAMIC_CALCULATOR_OPERATOR_VIRTUAL_H
+#pragma once
 
 #include "definitions.h"
 
@@ -84,6 +83,24 @@ public:
                 (type == UNARY_LIKE_MINUS || type == FUNC) ? 1 :
                 (type == NUMBER) ? 0 : -1);
     }
+
+    /*!
+     * check if operation is equal to another in context of it's token and number of arguments
+     * @param operation to compare with
+     * @return true if equal, false otherwise
+     */
+    bool equalInTermsOfTokenAndArgsNum(ACalcObject& operation)
+    {
+        if (getToken() == operation.getToken())
+        {
+            if ((getArgsNum() == -1) ||
+                ((operation.getArgsNum() == 0 || operation.getArgsNum() == 1) &&
+                (getArgsNum() == 0 || getArgsNum() == 1)) ||
+                (operation.getArgsNum() == 2 && getArgsNum() == 2))
+                return true;
+        }
+        return false;
+    }
 };
 
 /*********************************************************************************************
@@ -94,6 +111,3 @@ public:
     *       return <name>().clone();
     *  }
  *********************************************************************************************/
-
-
-#endif //DYNAMIC_CALCULATOR_OPERATOR_VIRTUAL_H

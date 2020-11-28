@@ -22,18 +22,18 @@ Calculator::Calculator(OperationCollection operations)
 */
 ErrorWDouble Calculator::calculate(const std::string& str)
 {
-    auto errorWithExpression = parseString(str);
+    ErrorWArrayOfp_ACalcObject errorWithExpression = parseString(str);
     Error error = errorWithExpression.first;
     auto expression = errorWithExpression.second;
 
-    if (error)
+    if (error != Error::ERR_OK)
         return {error, ACalcObject::NONE};
 
-    auto errorWithRPN = transformToRPN(expression);
+    ErrorWArrayOfp_ACalcObject errorWithRPN = transformToRPN(expression);
     error = errorWithRPN.first;
     auto RPN = errorWithRPN.second;
 
-    if (error)
+    if (error != Error::ERR_OK)
         return {error, ACalcObject::NONE};
 
     return calculateRPN(RPN);
@@ -56,36 +56,30 @@ bool isOpenBracket(p_ACalcObject& obj)
 * @param str expression
 * @return error and vector of calculation objects
 */
-std::pair<Error, std::vector<p_ACalcObject>> Calculator::parseString(const std::string& str) {
+ErrorWArrayOfp_ACalcObject Calculator::parseString(const std::string& str) {
 
     std::vector<p_ACalcObject> expression;
     for (int i = 0; i < str.size(); i++)
     {
+        // is current symbol is space, skip it
         if (isspace(str[i]))
             continue;
 
+        // if current symbol is digit, process number beginning with this digit
+        // and move i on length of this digit
         if (isdigit(str[i]))
         {
-            int iDigitStart = i;
-            int numOfDots = 0;
-            while (true)
-            {
-                if (str[i] == '.')
-                    numOfDots++;
-                if ((!isdigit(str[i]) && str[i] != '.') || numOfDots > 1)
-                {
-                    i--;
-                    break;
-                }
-                i++;
-            }
-            int iDigitEnd = i;
+            size_t numLenInChars = 1;
+            std::string substr = str.substr(i);
+            double num = std::stod(str.substr(i), &numLenInChars);
+            i += numLenInChars - 1;
 
-            double num = atof(str.substr(iDigitStart, iDigitEnd - iDigitStart + 1).c_str());
             expression.push_back(Number(num).clone());
 
             continue;
         }
+
+        // if current symbol is not a space or digit, then it must be some sort of operation
         p_ACalcObject operation;
         operation = operations.stringStartsWithOperation(str, i, -1);
         if (operation == nullptr)
@@ -100,12 +94,12 @@ std::pair<Error, std::vector<p_ACalcObject>> Calculator::parseString(const std::
         }
 
         if (operation == nullptr)
-            return {ERR_EXPRESSION, {}};
+            return {Error::ERR_EXPRESSION, {}};
 
         expression.push_back(operation);
         i += operation->getToken().size() - 1;
     }
-    return {ERR_OK, expression};
+    return {Error::ERR_OK, expression};
 }
 
 /*!
@@ -113,7 +107,7 @@ std::pair<Error, std::vector<p_ACalcObject>> Calculator::parseString(const std::
 * @param expression as vector of calculation objects
 * @return error and RPN
 */
-std::pair<Error, std::vector<p_ACalcObject>> Calculator::transformToRPN(std::vector<p_ACalcObject>& expression)
+ErrorWArrayOfp_ACalcObject Calculator::transformToRPN(std::vector<p_ACalcObject>& expression)
 {
     std::vector<p_ACalcObject> RPN;
     std::vector<p_ACalcObject> stackOperation;
@@ -131,7 +125,7 @@ std::pair<Error, std::vector<p_ACalcObject>> Calculator::transformToRPN(std::vec
                 while (true)
                 {
                     if (stackOperation.empty())
-                        return {ERR_EXPRESSION, {}};
+                        return {Error::ERR_EXPRESSION, {}};
 
                     auto operationFromStack = stackOperation.back();
                     stackOperation.pop_back();
@@ -166,12 +160,12 @@ std::pair<Error, std::vector<p_ACalcObject>> Calculator::transformToRPN(std::vec
         auto operationFromStack = stackOperation.back();
 
         if (isOpenBracket(operationFromStack))
-            return {ERR_EXPRESSION, {}};
+            return {Error::ERR_EXPRESSION, {}};
 
         stackOperation.pop_back();
         RPN.push_back(operationFromStack);
     }
-    return {ERR_OK, RPN};
+    return {Error::ERR_OK, RPN};
 }
 
 /*!
@@ -192,7 +186,7 @@ ErrorWDouble Calculator::calculateRPN(std::vector<p_ACalcObject>& RPN)
             std::vector<double> args(calcObject->getArgsNum());
 
             if (operands.size() < args.size())
-                return {ERR_EXPRESSION, ACalcObject::NONE};
+                return {Error::ERR_EXPRESSION, ACalcObject::NONE};
 
             for (int i = 0; i < args.size(); i++)
             {
@@ -202,13 +196,13 @@ ErrorWDouble Calculator::calculateRPN(std::vector<p_ACalcObject>& RPN)
             ErrorWDouble errorWDouble = calcObject->apply(args);
             Error err = errorWDouble.first;
             double res = errorWDouble.second;
-            if (err)
+            if (err != Error::ERR_OK)
                 return {err, ACalcObject::NONE};
 
             operands.push_back(res);
         }
     }
     if (operands.size() != 1)
-        return {ERR_EXPRESSION, ACalcObject::NONE};
-    return {ERR_OK, operands[0]};
+        return {Error::ERR_EXPRESSION, ACalcObject::NONE};
+    return {Error::ERR_OK, operands[0]};
 }

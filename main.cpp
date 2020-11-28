@@ -7,34 +7,22 @@
 
 std::string getErrorMsg(Error err)
 {
-    std::string res;
     switch(err)
     {
-        case ERR_OK:
-            res = "no error";
-            break;
+        case Error::ERR_OK: return("no error");
 
-        case ERR_ARGS:
-            res = "not valid function arguments";
-            break;
+        case Error::ERR_ARGS: return("not valid function arguments");
 
-        case ERR_DLL_NOT_VALID:
-            res = "can not open .dll file";
-            break;
+        case Error::ERR_DLL_NOT_VALID: return("can not open .dll file");
 
-        case ERR_DLL_FORMAT:
-            res = "can not load getInstance function from .dll file";
-            break;
+        case Error::ERR_DLL_FORMAT: return("can not load getInstance function from .dll file");
 
-        case ERR_TOKEN:
-            res = "not valid operation token";
-            break;
+        case Error::ERR_TOKEN: return("not valid operation token");
 
-        case ERR_EXPRESSION:
-            res = "not valid expression";
-            break;
+        case Error::ERR_EXPRESSION: return("not valid expression");
+
+        default: return("");
     }
-    return res;
 }
 
 int main(int argc, char* argv[]) {
@@ -46,8 +34,7 @@ int main(int argc, char* argv[]) {
     operationCollection.initBasicOperations();
 
     Error errWDll = operationCollection.addDllOperationsFromFolder(PATH_DLL);
-
-    if (errWDll)
+    if (errWDll != Error::ERR_OK)
     {
         std::cout << getErrorMsg(errWDll) << std::endl;
         return 0;
@@ -59,7 +46,7 @@ int main(int argc, char* argv[]) {
     Calculator calculator(operationCollection);
     ErrorWDouble res = calculator.calculate(expression);
 
-    if (res.first)
+    if (res.first != Error::ERR_OK)
         std::cout << getErrorMsg(res.first) << std::endl;
     else
         std::cout << std::to_string(res.second) << std::endl;

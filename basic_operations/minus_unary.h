@@ -2,8 +2,7 @@
 // Created by Mekhail on 12.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_MINUS_UNARY_H
-#define DYNAMIC_CALCULATOR_MINUS_UNARY_H
+#pragma once
 
 #include "../abstract_calc_object.h"
 
@@ -20,8 +19,8 @@ public:
     ErrorWDouble apply(std::vector<double> args)
     {
         if (args.size() != getArgsNum())
-            return {ERR_ARGS, ACalcObject::NONE};
-        return {ERR_OK, -args[0]};
+            return {Error::ERR_ARGS, ACalcObject::NONE};
+        return {Error::ERR_OK, -args[0]};
     }
 
     p_ACalcObject clone()
@@ -30,5 +29,3 @@ public:
         return minusUnary;
     }
 };
-
-#endif //DYNAMIC_CALCULATOR_MINUS_UNARY_H

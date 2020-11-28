@@ -2,12 +2,11 @@
 // Created by Mekhail on 12.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_ERROR_H
-#define DYNAMIC_CALCULATOR_ERROR_H
+#pragma once
 
 #include <string>
 
-enum Error
+enum class Error
 {
     ERR_OK,
     ERR_ARGS,
@@ -16,5 +15,3 @@ enum Error
     ERR_TOKEN,
     ERR_EXPRESSION
 };
-
-#endif //DYNAMIC_CALCULATOR_ERROR_H

@@ -2,8 +2,7 @@
 // Created by Mekhail on 12.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_BRACKET_OPEN_H
-#define DYNAMIC_CALCULATOR_BRACKET_OPEN_H
+#pragma once
 
 #include "../abstract_calc_object.h"
 
@@ -18,7 +17,7 @@ public:
     { return Type(-10);}
 
     ErrorWDouble apply(std::vector<double> args)
-    { return {ERR_OK, ACalcObject::NONE};}
+    { return {Error::ERR_OK, ACalcObject::NONE};}
 
     p_ACalcObject clone()
     {
@@ -27,5 +26,3 @@ public:
     }
 
 };
-
-#endif //DYNAMIC_CALCULATOR_BRACKET_OPEN_H

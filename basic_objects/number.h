@@ -2,8 +2,7 @@
 // Created by Mekhail on 12.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_NUMBER_H
-#define DYNAMIC_CALCULATOR_NUMBER_H
+#pragma once
 
 #include "../abstract_calc_object.h"
 
@@ -20,7 +19,7 @@ public:
     { return ACalcObject::NUMBER;}
 
     ErrorWDouble apply(std::vector<double> args)
-    { return {ERR_OK, n};}
+    { return {Error::ERR_OK, n};}
 
     p_ACalcObject clone()
     { return std::make_shared<Number>(n);}
@@ -28,5 +27,3 @@ public:
 private:
     double n;
 };
-
-#endif //DYNAMIC_CALCULATOR_NUMBER_H

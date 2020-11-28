@@ -16,7 +16,7 @@ public:
 
     ErrorWDouble apply(std::vector<double> args)
     {
-        return {ERR_OK, 3.14159265358979323846};
+        return {Error::ERR_OK, 3.14159265358979323846};
     }
 
     p_ACalcObject clone()

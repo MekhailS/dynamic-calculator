@@ -44,20 +44,22 @@ Error OperationCollection::addDllOperationsFromFolder(const std::string& path)
 
         HINSTANCE hGetProcID_DLL = LoadLibrary(filename.c_str());
         if (hGetProcID_DLL == nullptr)
-            return ERR_DLL_NOT_VALID;
+            return Error::ERR_DLL_NOT_VALID;
 
         auto p_getInstance = (factoryGetInstance)GetProcAddress(hGetProcID_DLL, GET_OPERATION_INSTANCE_str);
         if (p_getInstance == nullptr)
-            return ERR_DLL_FORMAT;
+            return Error::ERR_DLL_FORMAT;
 
         p_ACalcObject operation = p_getInstance();
 
-        if (operationAlreadyExists(operation))
-            return ERR_TOKEN;
+        if (std::any_of(operations.cbegin(), operations.cend(),
+                        [&operation](p_ACalcObject opInCollection){return opInCollection->equalInTermsOfTokenAndArgsNum(
+                                *operation);}))
+            return Error::ERR_TOKEN;
 
         operations.push_back(operation);
     }
-    return ERR_OK;
+    return Error::ERR_OK;
 }
 
 /*!
@@ -80,28 +82,4 @@ p_ACalcObject OperationCollection::stringStartsWithOperation(const std::string& 
             return operation;
     }
     return nullptr;
-}
-
-/*!
-* Check if collection already has such operation
-* (same token and num of args)
-* @param operation - operation, whose properties need to be found
-* @return true if such operation exists, false otherwise
-*/
-bool OperationCollection::operationAlreadyExists(p_ACalcObject& operation)
-{
-    for (auto& operationInCollection: operations)
-    {
-        if (operationInCollection->getToken() == operation->getToken())
-        {
-            if (operationInCollection->getArgsNum() == -1)
-                return true;
-            if ((operation->getArgsNum() == 0 || operation->getArgsNum() == 1) &&
-                (operationInCollection->getArgsNum() == 0 || operationInCollection->getArgsNum() == 1))
-                return true;
-            if (operation->getArgsNum() == 2 && operationInCollection->getArgsNum() == 2)
-                return true;
-        }
-    }
-    return false;
 }

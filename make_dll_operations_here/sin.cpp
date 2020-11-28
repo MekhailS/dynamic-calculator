@@ -18,8 +18,8 @@ public:
     ErrorWDouble apply(std::vector<double> args)
     {
         if (args.size() != getArgsNum())
-            return {ERR_ARGS, ACalcObject::NONE};
-        return {ERR_OK, sin(args[0])};
+            return {Error::ERR_ARGS, ACalcObject::NONE};
+        return {Error::ERR_OK, sin(args[0])};
     }
 
     p_ACalcObject clone()

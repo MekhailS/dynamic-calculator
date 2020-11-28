@@ -2,8 +2,7 @@
 // Created by Mekhail on 13.11.2020.
 //
 
-#ifndef DYNAMIC_CALCULATOR_OPERATION_COLLECTION_H
-#define DYNAMIC_CALCULATOR_OPERATION_COLLECTION_H
+#pragma once
 
 #include "definitions.h"
 
@@ -40,18 +39,7 @@ public:
 private:
 
     /*!
-     * Check if collection already has such operation
-     * (same token and num of args)
-     * @param operation - operation, whose properties need to be found
-     * @return true if such operation exists, false otherwise
-     */
-    bool operationAlreadyExists(p_ACalcObject& operation);
-
-    /*!
      * Collection of operations
      */
     std::vector<p_ACalcObject> operations;
 };
-
-
-#endif //DYNAMIC_CALCULATOR_OPERATION_COLLECTION_H
